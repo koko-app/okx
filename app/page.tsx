@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input"
 import { MetricsCard } from "@/components/metrics-card"
 import { StatsChart } from "@/components/stats-chart"
 import { VaultTable } from "@/components/vault-table"
+import { PriceUpdateStatus } from "@/components/price-update-status"
 import { BarChart3, ChevronDown, Globe, Home, LayoutDashboard, LifeBuoy, Settings, Wallet } from "lucide-react"
 import { TokenDetails } from "@/components/token-details"
 
@@ -57,10 +58,13 @@ export default function Page() {
               <h1 className="text-2xl font-bold">Overview</h1>
               <div className="text-sm text-muted-foreground">Aug 13, 2023 - Aug 18, 2023</div>
             </div>
-            <Button variant="outline" className="gap-2 bg-transparent">
-              Ethereum Network
-              <ChevronDown className="h-4 w-4" />
-            </Button>
+            <div className="flex items-center gap-4">
+              <PriceUpdateStatus />
+              <Button variant="outline" className="gap-2 bg-transparent">
+                Ethereum Network
+                <ChevronDown className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
           <div className="grid gap-4 md:grid-cols-3">
             <MetricsCard
@@ -103,6 +107,10 @@ export default function Page() {
             <StatsChart />
           </Card>
           <div className="mt-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Token Vaults</h2>
+              <div className="text-sm text-muted-foreground">Prices update automatically every 30 seconds</div>
+            </div>
             <VaultTable />
           </div>
           <div className="mt-6 space-y-6">
@@ -113,6 +121,10 @@ export default function Page() {
             <div>
               <h2 className="text-lg font-semibold mb-4">wSNS Token Details</h2>
               <TokenDetails tokenId="wsns" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold mb-4">Bitcoin Details</h2>
+              <TokenDetails tokenId="btc" />
             </div>
           </div>
         </main>
