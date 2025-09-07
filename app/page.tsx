@@ -60,10 +60,6 @@ export default function Page() {
             </div>
             <div className="flex items-center gap-4">
               <PriceUpdateStatus />
-              <Button variant="outline" className="gap-2 bg-transparent">
-                Ethereum Network
-                <ChevronDown className="h-4 w-4" />
-              </Button>
             </div>
           </div>
           <div className="grid gap-4 md:grid-cols-3">

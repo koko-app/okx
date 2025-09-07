@@ -53,7 +53,6 @@ const initialTokens: TokenData[] = [
     apy: "8.56%",
     state: "Flexible",
     startDate: "05.31.2020",
-    endDate: "01.01.2025",
     totalValueLocked: "$1,234,567,890",
     network: "Polygon Mainnet",
     explorerUrl: "https://polygonscan.com/token/0x299cd046bfed4003544040fdc20776a73055f743",
