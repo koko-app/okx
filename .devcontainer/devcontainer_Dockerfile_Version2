@@ -1,0 +1,12 @@
+# Optional customizations — the devcontainer base image already includes Node.
+# Keep this file if you want to add OS packages or tools used by CI / deploy.
+ARG VARIANT="18-bullseye"
+FROM mcr.microsoft.com/devcontainers/javascript-node:${VARIANT}
+
+# Install common tools
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl git make ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install Hardhat globally (optional)
+RUN npm install -g hardhat
