@@ -1,0 +1,1 @@
+{"symbol":"POL","name":"Polaris Token","address":"0x472dbd86732d57a3a0d9db441c6df91a3e0f298e","contractCreator":"0x7419Ba846886D88f12e271F7E7c0087846Df9Fac","chainlinkPriceFeed":"0x...feedAddress","decimals":18,"logoURI":"/images/tokens/POL.png","defaultPairings":["ETH","USDT","USDC","BNB","BTC"],"swapEnabled":true}
