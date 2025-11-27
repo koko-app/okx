@@ -1,0 +1,63 @@
+name: Deploy and Verify (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      network:
+        description: "Network to deploy to"
+        required: true
+        default: mainnet
+      initial_supply:
+        description: "Initial token supply (number)"
+        required: true
+        default: "1000000"
+
+jobs:
+  deploy-and-verify:
+    runs-on: ubuntu-latest
+    env:
+      MAINNET_RPC: ${{ secrets.MAINNET_RPC }}
+      BSC_RPC: ${{ secrets.BSC_RPC }}
+      DEPLOYER_KEY: ${{ secrets.DEPLOYER_KEY }}
+      ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+      BSCSCAN_API_KEY: ${{ secrets.BSCSCAN_API_KEY }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compile contracts
+        run: npx hardhat compile
+
+      - name: Deploy contract
+        id: deploy
+        run: |
+          set -e
+          echo "Deploying to network: ${{ github.event.inputs.network }}"
+          npx hardhat run scripts/deploy.js --network ${{ github.event.inputs.network }} | tee deploy-output.txt
+          # Hardhat deploy script prints: PolarisToken deployed to: 0x...
+          ADDRESS=$(grep -i "PolarisToken deployed to:" deploy-output.txt | tail -n1 | awk '{print $NF}')
+          if [ -z "$ADDRESS" ]; then
+            echo "Could not find deployed address in output:"
+            cat deploy-output.txt
+            exit 1
+          fi
+          echo "::set-output name=address::$ADDRESS"
+      - name: Verify contract on Etherscan/BscScan
+        if: always()
+        run: |
+          ADDRESS="${{ steps.deploy.outputs.address }}"
+          echo "Verifying address: $ADDRESS"
+          # Use the same initial supply constructor argument used during deploy
+          INITIAL_SUPPLY="${{ github.event.inputs.initial_supply }}"
+          npx hardhat verify --network ${{ github.event.inputs.network }} $ADDRESS $INITIAL_SUPPLY || {
+            echo "Verification failed (it may already be verified). Check logs."
+            exit 0
+          }
